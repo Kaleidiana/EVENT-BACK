@@ -3,11 +3,11 @@ const User = require('../Models/userModel');
 module.exports = {
   registerUser: async (req, res, next) => {
     try {
-      const { firstname, lastname, gender } = req.body;
+      const { username, gender } = req.body;
       if (!firstname || !lastname) {
         return res.status(400).json({ message: 'Firstname and Lastname are required' });
       }
-      const newUser = new User({ firstname, lastname, gender });
+      const newUser = new User({ username, gender });
       await newUser.save();
       res.status(201).json(newUser);
     } catch (error) {
