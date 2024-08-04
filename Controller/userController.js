@@ -1,23 +1,31 @@
 const User = require('../Models/userModel');
 
 module.exports = {
+  // Register a new user
   registerUser: async (req, res, next) => {
     try {
-      const { username, gender } = req.body;
-      if (!username) {
-        return res.status(400).json({ message: 'Username are required' });
+      const { firstname, lastname, gender } = req.body;
+
+      // Validate required fields
+      if (!firstname || !lastname) {
+        return res.status(400).json({ message: 'Firstname and lastname are required' });
       }
-      const newUser = new User({ username, gender });
+
+      // Create a new user
+      const newUser = new User({ firstname, lastname, gender });
+
+      // Save the user to the database
       await newUser.save();
+
+      // Respond with the created user
       res.status(201).json(newUser);
     } catch (error) {
       next(error);
     }
   },
 
-  // Define other methods here
+  // Get all users
   getAllUsers: async (req, res, next) => {
-    // Example method for getting all users
     try {
       const users = await User.find();
       res.status(200).json(users);
@@ -26,15 +34,55 @@ module.exports = {
     }
   },
 
+  // Update a user by ID
   updateUser: async (req, res, next) => {
-    // Example method for updating a user
+    try {
+      const userId = req.params.id;
+      const updates = req.body;
+
+      const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
   },
 
+  // Delete a user by ID
   deleteUser: async (req, res, next) => {
-    // Example method for deleting a user
+    try {
+      const userId = req.params.id;
+
+      const deletedUser = await User.findByIdAndDelete(userId);
+
+      if (!deletedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+      next(error);
+    }
   },
 
+  // Get a user by ID
   getUser: async (req, res, next) => {
-    // Example method for getting a user by ID
+    try {
+      const userId = req.params.id;
+
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
   },
 };
