@@ -4,8 +4,8 @@ module.exports = {
   registerUser: async (req, res, next) => {
     try {
       const { username, gender } = req.body;
-      if (!firstname || !lastname) {
-        return res.status(400).json({ message: 'Firstname and Lastname are required' });
+      if (!username) {
+        return res.status(400).json({ message: 'Username are required' });
       }
       const newUser = new User({ username, gender });
       await newUser.save();
