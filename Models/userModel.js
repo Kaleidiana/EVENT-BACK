@@ -12,9 +12,9 @@ const userSchema = new Schema({
         required: [true, 'Lastname is required']
     },
     gender: {
-        type: String,
-        enum: ['Male', 'Female', 'Other'], // Optional: Restrict gender to certain values
-    },
+        type: String
+        
+    }
     // Additional fields can be added here
     // email: { type: String, required: [true, 'Email is required'], unique: true },
     // password: { type: String, required: [true, 'Password is required'] },
