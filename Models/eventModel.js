@@ -1,22 +1,9 @@
-// models/Event.js
-
 const mongoose = require('mongoose');
 
 const eventSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-    required: false,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
-}, {
-  timestamps: true, // Adds createdAt and updatedAt fields automatically
+  title: String,
+  date: Date,
+  location: String
 });
 
 const Event = mongoose.model('Event', eventSchema);
