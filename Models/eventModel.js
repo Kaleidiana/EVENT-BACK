@@ -10,10 +10,10 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     required: [true, 'Date is required']
   },
-  // location: {
-  //   type: String,
-  //   required: [true, 'Location is required']
-  // }
+  location: {
+    type: String,
+    required: [true, 'Location is required']
+  }
 });
 
 // Create the Event model

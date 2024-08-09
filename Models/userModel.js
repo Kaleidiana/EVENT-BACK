@@ -1,4 +1,3 @@
-// userModel.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -12,6 +11,10 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
+  },
+  selectedEvent: {
+    type: mongoose.Schema.Types.ObjectId, // Store the ID of the selected event
+    ref: 'Event'
   }
 });
 

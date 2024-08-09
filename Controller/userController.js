@@ -4,20 +4,16 @@ module.exports = {
   // Register a new user
   registerUser: async (req, res, next) => {
     try {
-      const { firstname, lastname, gender } = req.body;
+      const { firstname, lastname, gender, selectedEvent } = req.body;
 
-      // Validate required fields
       if (!firstname || !lastname) {
         return res.status(400).json({ message: 'Firstname and lastname are required' });
       }
 
-      // Create a new user
-      const newUser = new User({ firstname, lastname, gender });
-
-      // Save the user to the database
+      // Create a new user with selectedEvent
+      const newUser = new User({ firstname, lastname, gender, selectedEvent });
       await newUser.save();
 
-      // Respond with the created user
       res.status(201).json(newUser);
     } catch (error) {
       next(error);
