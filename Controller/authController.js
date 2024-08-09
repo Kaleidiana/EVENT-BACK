@@ -19,6 +19,7 @@ module.exports = {
       // Create and save new user
       const user = new User(result);
       const savedUser = await user.save();
+      
 
       // Generate access token
       const accessToken = await signAccessToken(savedUser.id);
