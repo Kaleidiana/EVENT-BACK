@@ -4,10 +4,11 @@ const { verifyAccessToken } = require('../helpers/jwtHelpers');
 
 const routes = express.Router();
 
-// Base path for user routes: /users
-routes.get('/users/getAllUsers', verifyAccessToken, userController.getAllUsers);
-routes.patch('/users/updateUser/:id', userController.updateUser);
-routes.delete('/users/deleteUser/:id', userController.deleteUser);
-routes.get('/users/getUser/:id', userController.getUser);
+// Define the correct routes
+routes.get('/getAllUsers', verifyAccessToken, userController.getAllUsers);
+routes.post('/registerUser', userController.registerUser);
+routes.patch('/updateUser/:id', verifyAccessToken, userController.updateUser);
+routes.delete('/deleteUser/:id', verifyAccessToken, userController.deleteUser);
+routes.get('/getUser/:id', verifyAccessToken, userController.getUser);
 
 module.exports = routes;

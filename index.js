@@ -1,25 +1,35 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Import the cors package
-const userRoute = require('./Routes/userRoute');
-const authRoute = require('./Routes/authRoute');
-const eventRoute = require('./Routes/eventRoute');
+const cors = require('cors'); // To handle CORS issues
+const userRoute = require('./Routes/userRoute'); // Ensure the path is correct
+const authRoute = require('./Routes/authRoute'); // If you have authentication routes
+const eventRoute = require('./Routes/eventRoute'); // If you have event routes
 
-require('dotenv').config(); // Load environment variables
-
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('Could not connect to MongoDB:', err.message));
+require('dotenv').config();
 
 const app = express();
 
-app.use(cors()); // Enable CORS
-app.use(express.json());
+// Middleware
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json()); // Parse JSON bodies
 
-app.use('/api', userRoute); // Prefix routes with /api
-app.use('/api', authRoute);
-app.use('/api', eventRoute);
+// Routes
+app.use('/api/users', userRoute); // Use /api/users as the base path for user routes
+app.use('/api/auth', authRoute); // Adjust if you have auth routes
+app.use('/api/events', eventRoute);
+ // Adjust if you have event routes
 
-app.listen(process.env.PORT || 4000, () => {
-  console.log(`Server running on http://localhost:${process.env.PORT || 4000}`);
+// Database connection
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 50000 // Increase timeout if necessary
+})
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('Could not connect to MongoDB:', err.message));
+
+// Start server
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
