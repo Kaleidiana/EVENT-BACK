@@ -14,7 +14,7 @@ const validateAuth = async (req, res, next) => {
 };
 
 // Register user route with validation middleware
-routes.post('/registerUser', validateAuth, authController.registerUser);
+routes.post('/register', validateAuth, authController.registerUser);
 
 // Login route with validation middleware
 routes.post('/login', validateAuth, authController.login);
