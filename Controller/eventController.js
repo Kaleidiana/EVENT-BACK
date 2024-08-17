@@ -14,6 +14,7 @@ exports.createEvent = async (req, res) => {
 };
 
 
+
 // View all events
 exports.viewAllEvents = async (req, res) => {
   try {
