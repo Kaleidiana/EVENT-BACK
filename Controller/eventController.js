@@ -3,6 +3,7 @@ const Event = require('../Models/eventModel');
 
 // Create a new event
 exports.createEvent = async (req, res) => {
+  console.log('createEvent controller function');
   try {
     const event = new Event(req.body);
     await event.save();
@@ -11,6 +12,7 @@ exports.createEvent = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 // View all events
 exports.viewAllEvents = async (req, res) => {

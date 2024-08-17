@@ -16,8 +16,7 @@ app.use(express.json()); // Parse JSON bodies
 // Routes
 app.use('/api/users', userRoute); // Use /api/users as the base path for user routes
 app.use('/api/auth', authRoute); // Adjust if you have auth routes
-app.use('/api/events', eventRoute);
- // Adjust if you have event routes
+app.use('/api/events', eventRoute); // Adjust if you have event routes
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -26,7 +25,6 @@ mongoose.connect(process.env.MONGODB_URI, {
   serverSelectionTimeoutMS: 50000 // Increase timeout if necessary
 })
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('Could not connect to MongoDB:', err.message));
 
 // Start server
 const PORT = process.env.PORT || 4000;
