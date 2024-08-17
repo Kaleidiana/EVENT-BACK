@@ -4,11 +4,8 @@ const eventController = require('../Controller/eventController');
 const router = express.Router();
 
 // Route to create a new event
-router.post('/', (req, res, next) => {
-    console.log('POST /api/events route hit');
-    next();
-  }, eventController.createEvent);
-  
+router.post('/', eventController.createEvent);
+
 // Route to view all events
 router.get('/', eventController.viewAllEvents);
 
