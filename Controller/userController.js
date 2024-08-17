@@ -21,12 +21,13 @@ module.exports = {
   },
 
   // Get all users
-  getAllUsers: async (req, res, next) => {
+  getAllUsers: async (req, res) => {
     try {
-      const users = await User.find();
-      res.status(200).json(users);
+      // Fetch users and populate the selectedEvent field
+      const users = await User.find().populate('selectedEvent');
+      res.json(users);
     } catch (error) {
-      next(error);
+      res.status(500).json({ message: error.message });
     }
   },
 
