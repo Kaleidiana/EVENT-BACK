@@ -21,17 +21,14 @@ module.exports = {
   },
 
   // Get all users
-  getAllUsers: async (req, res) => {
+  getAllUsers: async (req, res, next) => {
     try {
       const users = await User.find().populate('selectedEvent');
-      console.log(users); // Log the fetched users
-      res.json(users);
+      res.status(200).json(users);
     } catch (error) {
-      console.error('Error fetching users:', error); // Log the error for debugging
-      res.status(500).json({ message: error.message });
+      next(error);
     }
   },
-  
 
   // Update a user by ID
   updateUser: async (req, res, next) => {
