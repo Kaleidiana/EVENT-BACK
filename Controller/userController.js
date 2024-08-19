@@ -21,14 +21,15 @@ module.exports = {
   },
 
   // Get all users
-  getAllUsers: async (req, res, next) => {
-    try {
-      const users = await User.find().populate('selectedEvent');
-      res.status(200).json(users);
-    } catch (error) {
-      next(error);
-    }
-  },
+  // Example of correct getAllUsers implementation
+getAllUsers: async (req, res) => {
+  try {
+    const users = await User.find().populate('selectedEvent');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+},
 
   // Update a user by ID
   updateUser: async (req, res, next) => {
