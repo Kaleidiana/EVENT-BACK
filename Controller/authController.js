@@ -9,25 +9,32 @@ module.exports = {
       const { email, password } = req.body;
 
       // Validate request body
-      if (!email || !password) throw createError.BadRequest('Email and password are required');
-      const result = await authaaSchema.validateAsync(req.body);
+      if (!email || !password) {
+        throw createError.BadRequest('Email and password are required');
+      }
+      
+      // Validate with schema
+      await authaaSchema.validateAsync(req.body);
 
       // Check if the user already exists
       const existingUser = await User.findOne({ email });
-      if (existingUser) throw createError.Conflict(`${email} is already registered`);
+      if (existingUser) {
+        throw createError.Conflict(`${email} is already registered`);
+      }
 
       // Create and save new user
-      const user = new User(result);
+      const user = new User({ email, password }); // Assuming password is hashed in the model
       const savedUser = await user.save();
-      
 
       // Generate access token
       const accessToken = await signAccessToken(savedUser.id);
 
       // Respond with the access token
-      res.send({ accessToken });
+      res.status(201).json({ accessToken }); // Respond with 201 Created
     } catch (error) {
-      if (error.isJoi) error.status = 422;
+      if (error.isJoi) {
+        return next(createError.BadRequest(error.details[0].message)); // Return Joi validation error
+      }
       next(error);
     }
   },
@@ -42,7 +49,7 @@ module.exports = {
       }
 
       // Validate password
-      const isMatch = await user.isValidPassword(result.password);
+      const isMatch = await user.isValidPassword(result.password); // Ensure this method exists and works correctly
       if (!isMatch) {
         throw createError.Unauthorized('Invalid password');
       }
@@ -51,10 +58,10 @@ module.exports = {
       const accessToken = await signAccessToken(user.id);
 
       // Respond with the access token
-      res.send({ accessToken });
+      res.status(200).json({ accessToken }); // Respond with 200 OK
     } catch (error) {
       if (error.isJoi) {
-        return next(createError.BadRequest('Invalid email/password'));
+        return next(createError.BadRequest('Invalid email/password')); // Generic error message for validation issues
       }
       next(error);
     }
