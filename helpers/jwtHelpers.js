@@ -37,13 +37,19 @@ module.exports = {
           return next(createError.Unauthorized('Token missing from Authorization header'));
         }
       
+        console.log(`Received token: ${token}`); // Log the token being sent
+      
         JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-          if (err) return next(createError.Unauthorized('Invalid token'));
+          if (err) {
+            console.log(`Error verifying token: ${err.message}`); // Log the error message
+            return next(createError.Unauthorized('Invalid token'));
+          }
       
           req.payload = payload;
           next();
         });
-    },
+      },
+    
     
 
     // Verifying refresh token
