@@ -5,12 +5,12 @@ module.exports = {
     // Generating access token for the user
     signAccessToken: (userId) => {
         return new Promise((resolve, reject) => {
-            const payload = {}; // You might want to include user-specific data here
+            const payload = { userId }; // Include user-specific data here
             const secret = process.env.ACCESS_TOKEN_SECRET;
             if (!secret) return reject(createError.InternalServerError('Access token secret is not defined'));
 
             const options = {
-                expiresIn: '10m',
+                expiresIn: '1hr',
                 issuer: 'DeeTechCoder.com',
                 audience: userId,
             };
@@ -30,8 +30,13 @@ module.exports = {
         const authHeader = req.headers['authorization'];
         if (!authHeader) return next(createError.Unauthorized('Authorization header missing'));
 
-        const bearertoken = authHeader.split(' ');
-        const token = bearertoken[1];
+        // Handle possible "Bearer " prefix
+        const parts = authHeader.split(' ');
+        if (parts.length !== 2 || parts[0] !== 'Bearer') {
+            return next(createError.Unauthorized('Invalid authorization format'));
+        }
+        const token = parts[1];
+
         if (!token) return next(createError.Unauthorized('Token missing'));
 
         JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
