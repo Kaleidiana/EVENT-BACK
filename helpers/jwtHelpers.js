@@ -26,28 +26,23 @@ module.exports = {
     },
 
     // Middleware to verify access token
-    verifyAccessToken: (req, res, next) => {
+    const verifyAccessToken = (req, res, next) => {
         const authHeader = req.headers['authorization'];
-        if (!authHeader) return next(createError.Unauthorized('Authorization header missing'));
-
-        // Handle possible "Bearer " prefix
-        const parts = authHeader.split(' ');
-        if (parts.length !== 2 || parts[0] !== 'Bearer') {
-            return next(createError.Unauthorized('Invalid authorization format'));
-        }
-        const token = parts[1];
-
-        if (!token) return next(createError.Unauthorized('Token missing'));
-
+        if (!authHeader) return res.status(401).json({ message: 'Authorization header missing' });
+      
+        const token = authHeader.split(' ')[1];
+        if (!token) return res.status(401).json({ message: 'Token missing' });
+      
         JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-            if (err) {
-                console.log(err.message);
-                return next(createError.Unauthorized('Invalid access token'));
-            }
-            req.payload = payload;
-            next();
+          if (err) {
+            console.log(err.message);
+            return res.status(401).json({ message: 'Invalid access token' });
+          }
+          req.payload = payload;
+          next();
         });
-    },
+      };
+      
 
     // Verifying refresh token
     verifyRefreshToken: (refreshToken) => {
