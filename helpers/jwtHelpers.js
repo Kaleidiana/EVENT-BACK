@@ -10,7 +10,7 @@ module.exports = {
             if (!secret) return reject(createError.InternalServerError('Access token secret is not defined'));
 
             const options = {
-                expiresIn: '10m',
+                expiresIn: '60m',
                 issuer: 'DeeTechCoder.com',
                 audience: userId,
             };
@@ -28,21 +28,23 @@ module.exports = {
     // Middleware to verify access token
     verifyAccessToken: (req, res, next) => {
         const authHeader = req.headers['authorization'];
-        if (!authHeader) return next(createError.Unauthorized('Authorization header missing'));
-
-        const bearertoken = authHeader.split(' ');
-        const token = bearertoken[1];
-        if (!token) return next(createError.Unauthorized('Token missing'));
-
+        if (!authHeader) {
+          return next(createError.Unauthorized('Authorization header missing'));
+        }
+      
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+          return next(createError.Unauthorized('Token missing from Authorization header'));
+        }
+      
         JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-            if (err) {
-                console.log(err.message);
-                return next(createError.Unauthorized('Invalid access token'));
-            }
-            req.payload = payload;
-            next();
+          if (err) return next(createError.Unauthorized('Invalid token'));
+      
+          req.payload = payload;
+          next();
         });
     },
+    
 
     // Verifying refresh token
     verifyRefreshToken: (refreshToken) => {
