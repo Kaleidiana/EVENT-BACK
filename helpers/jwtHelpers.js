@@ -28,19 +28,26 @@ module.exports = {
     },
 
 //middleware to verify access token
-verifyAccessToken: (req, res, next)=>{
-    if(!req.helpers['authorization']) return next(createError.Unauthorized());
+verifyAccessToken: (UserId) = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    const bearertoken = authHeader.split(' ');
-    const token = bearertoken[1];
-    JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload)=>{
-       if(err){
-        return next(createError.Unauthorized());
-       }
-       req.payload = payload;
-       next()
-    })
-},
+    if (!authHeader) {
+      return next(createError.Unauthorized('Authorization header missing'));
+    }
+  
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      return next(createError.Unauthorized('Token missing from Authorization header'));
+    }
+  
+    JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
+      if (err) return next(createError.Unauthorized('Invalid token'));
+  
+      req.payload = payload;
+      next();
+    });
+  };
+  
+
 
 verifyRefreshToken: (refreshToken)=> {
     return new Promise((resolve, reject) => {

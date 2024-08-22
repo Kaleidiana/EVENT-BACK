@@ -11,10 +11,6 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-  },
-  selectedEvent: {
-    type: mongoose.Schema.Types.ObjectId, // Store the ID of the selected event
-    ref: 'Event' // Reference to the Event model
   }
 });
 
