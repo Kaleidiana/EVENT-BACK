@@ -1,13 +1,10 @@
 const JWT = require('jsonwebtoken');
 const createError = require('http-errors');
 
-
-
 const User = require('../Models/authModel');
 
-
 module.exports = {
-    //giving token to the user
+    // Giving token to the user
     signAccessToken: (UserId) => {
         return new Promise((resolve, reject) => {
             const payload = {};
@@ -27,38 +24,35 @@ module.exports = {
         });
     },
 
-//middleware to verify access token
-verifyAccessToken: (UserId) = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader) {
-      return next(createError.Unauthorized('Authorization header missing'));
-    }
-  
-    const token = authHeader.split(' ')[1];
-    if (!token) {
-      return next(createError.Unauthorized('Token missing from Authorization header'));
-    }
-  
-    JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-      if (err) return next(createError.Unauthorized('Invalid token'));
-  
-      req.payload = payload;
-      next();
-    });
-  };
-  
+    // Middleware to verify access token
+    verifyAccessToken: (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        if (!authHeader) {
+            return next(createError.Unauthorized('Authorization header missing'));
+        }
 
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return next(createError.Unauthorized('Token missing from Authorization header'));
+        }
 
-verifyRefreshToken: (refreshToken)=> {
-    return new Promise((resolve, reject) => {
-        JWT.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
-            if (err) {
-                return reject(createError.Unauthorized());
-            }
-            const userId = payload.aud; // Corrected `payId` to `payload`
-            resolve(userId);
+        JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
+            if (err) return next(createError.Unauthorized('Invalid token'));
+
+            req.payload = payload;
+            next();
         });
-    });
+    },
 
-}
+    verifyRefreshToken: (refreshToken) => {
+        return new Promise((resolve, reject) => {
+            JWT.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
+                if (err) {
+                    return reject(createError.Unauthorized());
+                }
+                const userId = payload.aud; // Corrected `payId` to `payload`
+                resolve(userId);
+            });
+        });
+    }
 };
