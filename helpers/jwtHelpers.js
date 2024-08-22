@@ -10,7 +10,7 @@ module.exports = {
             if (!secret) return reject(createError.InternalServerError('Access token secret is not defined'));
 
             const options = {
-                expiresIn: '1hr',
+                expiresIn: '1h',
                 issuer: 'DeeTechCoder.com',
                 audience: userId,
             };
