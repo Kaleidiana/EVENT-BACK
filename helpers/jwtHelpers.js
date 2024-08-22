@@ -26,7 +26,7 @@ module.exports = {
     },
 
     // Middleware to verify access token
-    const verifyAccessToken = (req, res, next) => {
+    verifyAccessToken: (req, res, next) => {
         const authHeader = req.headers['authorization'];
         if (!authHeader) return res.status(401).json({ message: 'Authorization header missing' });
       
@@ -41,8 +41,7 @@ module.exports = {
           req.payload = payload;
           next();
         });
-      };
-      
+    },
 
     // Verifying refresh token
     verifyRefreshToken: (refreshToken) => {
