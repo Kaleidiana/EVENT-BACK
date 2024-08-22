@@ -13,8 +13,8 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   selectedEvent: {
-    type: mongoose.Schema.Types.ObjectId, // Store the ID of the selected event
-    ref: 'Event' // Reference to the Event model
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event' // Ensure this matches the name of your Event model
   }
 });
 
