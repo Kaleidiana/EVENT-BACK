@@ -26,29 +26,35 @@ module.exports = {
     },
 
     // Middleware to verify access token
-    verifyAccessToken: (req, res, next) => {
-        const authHeader = req.headers['authorization'];
-        if (!authHeader) {
-            return next(createError.Unauthorized('Authorization header missing'));
+// Middleware to verify access token
+verifyAccessToken: (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        console.log('Authorization header missing');
+        return next(createError.Unauthorized('Authorization header missing'));
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+        console.log('Token missing from Authorization header');
+        return next(createError.Unauthorized('Token missing from Authorization header'));
+    }
+
+    console.log(`Received token: ${token}`); // Log the token being sent
+
+    JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
+        if (err) {
+            console.log(`Error verifying token: ${err.message}`); // Log the error message
+            return next(createError.Unauthorized('Invalid token'));
         }
 
-        const token = authHeader.split(' ')[1];
-        if (!token) {
-            return next(createError.Unauthorized('Token missing from Authorization header'));
-        }
+        console.log(`Token payload: ${JSON.stringify(payload)}`); // Log the payload if verification is successful
 
-        console.log(`Received token: ${token}`); // Log the token being sent
+        req.payload = payload;
+        next();
+    });
+},
 
-        JWT.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
-            if (err) {
-                console.log(`Error verifying token: ${err.message}`); // Log the error message
-                return next(createError.Unauthorized('Invalid token'));
-            }
-
-            req.payload = payload;
-            next();
-        });
-    },
 
     // Verifying refresh token
     verifyRefreshToken: (refreshToken) => {

@@ -11,11 +11,8 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-  },
-  selectedEvent: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Event' // Ensure this matches the name of your Event model
   }
+  // Remove selectedEvent from the schema
 });
 
 const User = mongoose.model('User', userSchema);

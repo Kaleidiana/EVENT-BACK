@@ -4,14 +4,14 @@ module.exports = {
   // Register a new user
   registerUser: async (req, res, next) => {
     try {
-      const { firstname, lastname, gender, selectedEvent } = req.body;
+      const { firstname, lastname, gender } = req.body; // Remove selectedEvent
 
       if (!firstname || !lastname) {
         return res.status(400).json({ message: 'Firstname and lastname are required' });
       }
 
-      // Create a new user with selectedEvent
-      const newUser = new User({ firstname, lastname, gender, selectedEvent });
+      // Create a new user without selectedEvent
+      const newUser = new User({ firstname, lastname, gender });
       await newUser.save();
 
       res.status(201).json(newUser);
@@ -21,15 +21,14 @@ module.exports = {
   },
 
   // Get all users
-  // Example of correct getAllUsers implementation
-getAllUsers: async (req, res) => {
-  try {
-    const users = await User.find().populate('selectedEvent');
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-},
+  getAllUsers: async (req, res) => {
+    try {
+      const users = await User.find(); // Remove .populate('selectedEvent')
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 
   // Update a user by ID
   updateUser: async (req, res, next) => {
