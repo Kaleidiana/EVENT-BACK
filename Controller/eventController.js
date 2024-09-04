@@ -22,7 +22,7 @@ exports.viewAllEvents = async (req, res) => {
     res.json(events);
   } catch (error) {
     res.status(500).json({ message: error.message });
-  }
+  
 };
 
 // View a single event by ID
