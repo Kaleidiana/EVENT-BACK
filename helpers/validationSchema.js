@@ -1,10 +1,7 @@
 const Joi = require('joi');
 
-const authaaSchema = Joi.object({
-    email: Joi.string().email().lowercase().required(),
-    password: Joi.string().min(6).required(),
-})
-
-module.exports ={
-    authaaSchema
-}
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+  role: Joi.string().valid('Admin', 'User').required() // Include role in the schema
+});
