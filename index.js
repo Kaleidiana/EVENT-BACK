@@ -17,6 +17,7 @@ app.use(express.json()); // Parse JSON bodies
 app.use('/api/users', userRoute); // Use /api/users as the base path for user routes
 app.use('/api/auth', authRoute); // Adjust if you have auth routes
 app.use('/api/events', eventRoute); // Adjust if you have event routes
+app.use('/api/bookings', bookingRoute);
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI, {

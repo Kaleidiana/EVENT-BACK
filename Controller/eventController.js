@@ -1,4 +1,3 @@
-
 const Event = require('../Models/eventModel');
 
 // Create a new event
@@ -13,8 +12,6 @@ exports.createEvent = async (req, res) => {
   }
 };
 
-
-
 // View all events
 exports.viewAllEvents = async (req, res) => {
   try {
@@ -22,7 +19,7 @@ exports.viewAllEvents = async (req, res) => {
     res.json(events);
   } catch (error) {
     res.status(500).json({ message: error.message });
-  
+  } // This catch block was not properly closed in your original code
 };
 
 // View a single event by ID
