@@ -6,7 +6,7 @@ const User = require('../Models/userModel'); // Adjust the path as needed
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password } = req.body;
 
   // Check if user exists and password is correct
   const user = await User.findOne({ email });
@@ -14,13 +14,8 @@ router.post('/login', async (req, res) => {
     return res.status(401).send('Invalid email or password');
   }
 
-  // Check if the role is correct
-  if (role === 'Admin' && user.email !== 'your-admin-email@example.com') {
-    return res.status(403).send('Only the admin can log in as Admin');
-  }
-
   // Generate token
-  const token = JWT.sign({ userId: user._id, role }, process.env.ACCESS_TOKEN_SECRET);
+  const token = JWT.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET);
 
   res.json({ token });
 });

@@ -4,6 +4,7 @@ const cors = require('cors'); // To handle CORS issues
 const userRoute = require('./Routes/userRoute'); // Ensure the path is correct
 const authRoute = require('./Routes/authRoute'); // If you have authentication routes
 const eventRoute = require('./Routes/eventRoute'); // If you have event routes
+const bookingRoute = require('./Routes/bookingRoute');
 
 require('dotenv').config();
 
