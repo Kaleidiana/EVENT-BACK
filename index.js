@@ -6,6 +6,7 @@ const authRoute = require('./Routes/authRoute'); // If you have authentication r
 const eventRoute = require('./Routes/eventRoute'); // If you have event routes
 const bookingRoute = require('./Routes/bookingRoute');
 
+
 require('dotenv').config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use('/api/users', userRoute); // Use /api/users as the base path for user ro
 app.use('/api/auth', authRoute); // Adjust if you have auth routes
 app.use('/api/events', eventRoute); // Adjust if you have event routes
 app.use('/api/bookings', bookingRoute);
+
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI, {
