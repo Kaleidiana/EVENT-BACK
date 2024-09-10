@@ -6,7 +6,6 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Title is required']
   },
-  
   location: {
     type: String,
     required: [true, 'Location is required']
@@ -18,6 +17,10 @@ const eventSchema = new mongoose.Schema({
   price: {
     type: String,
     required: [true, 'Price is required']
+  },
+  image: {
+    type: String,
+    required: false // Image is optional
   }
 });
 

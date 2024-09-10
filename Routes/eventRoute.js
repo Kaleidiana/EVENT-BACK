@@ -1,21 +1,9 @@
 const express = require('express');
-const eventController = require('../Controller/eventController');
-
 const router = express.Router();
+const eventController = require('../Controller/eventController'); // Adjust the path if necessary
 
-// Route to create a new event
-router.post('/', eventController.createEvent);
-
-// Route to view all events
-router.get('/', eventController.viewAllEvents);
-
-// Route to view a single event
-router.get('/:id', eventController.viewEvent);
-
-// Route to update an event
-router.put('/:id', eventController.editEvent);
-
-// Route to delete an event
-router.delete('/:id', eventController.deleteEvent);
+// Ensure that the methods in eventController are correctly defined
+router.get('/', eventController.getAllEvents); // Ensure getAllEvents is defined
+router.post('/', eventController.upload.single('image'), eventController.createEvent); // Ensure createEvent and upload are defined
 
 module.exports = router;
