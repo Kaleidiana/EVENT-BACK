@@ -1,9 +1,27 @@
-const Booking = require('../Models/bookingModel'); // Ensure the correct path for the booking model
+const Booking = require('../Models/bookingModel');
+const Event = require('../Models/eventModel');
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
+  const { name, email, numberOfTickets, eventId, userId } = req.body;
+
   try {
-    const booking = new Booking(req.body);
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    const totalPrice = event.price * numberOfTickets; // Assuming `price` is in the event model
+
+    const booking = new Booking({
+      name,
+      email,
+      numberOfTickets,
+      eventId,
+      userId,
+      totalPrice,
+    });
+
     await booking.save();
     res.status(201).json(booking);
   } catch (error) {
@@ -14,7 +32,7 @@ exports.createBooking = async (req, res) => {
 // View all bookings
 exports.viewAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find();
+    const bookings = await Booking.find().populate('eventId');
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -24,7 +42,7 @@ exports.viewAllBookings = async (req, res) => {
 // View a single booking by ID
 exports.viewBooking = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id);
+    const booking = await Booking.findById(req.params.id).populate('eventId');
     if (!booking) {
       return res.status(404).json({ message: 'Booking not found' });
     }
